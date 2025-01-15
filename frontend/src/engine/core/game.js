@@ -1,28 +1,38 @@
-export const startGame = (canvas) => {
-    const ctx = canvas.getContext('2d');
-    let running = true;
+import Player from "./player.js";
+import InputHandler from "./inputHandler.js";
 
-    const gameLoop = () => {
-        if (!running) return;
+export default class Game {
+    constructor(canvas) {
+        this.canvas = canvas;
+        this.context = canvas.getContext('2d');
+        this.player = new Player(50, 50, 30, 30, 'blue');
+        this.lastTime = 0;
+        this.input = new InputHandler;
+    }
 
-        // Clear the canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    start() {
+        requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
+    }
 
-        // render game state (placeholder)
-        ctx.fillStyle = 'red';
-        ctx.fillRect(50, 50, 50, 50);
+    gameLoop(timestamp) {
+        const deltaTime = (timestamp - this.lastTime) / 1000;
+        this.lastTime = timestamp;
 
-        // next frame
-        requestAnimationFrame(gameLoop);
-    };
+        this.update(deltaTime, this.input);
+        this.render();
 
-    // start loop
-    gameLoop();
+        requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
+    }
 
-    return {
-        cleanup: () => {
-            running = false;
-        },
-    };
+    update(deltaTime, input) {
+        // Update the player 
+        this.player.update(deltaTime, input);
+    }
 
-};
+    render() {
+        // clear canvas
+        this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+        this.player.draw(this.context);
+    }
+}

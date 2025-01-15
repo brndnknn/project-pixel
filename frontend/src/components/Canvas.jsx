@@ -1,23 +1,18 @@
 import { useRef, useEffect } from "react";
 import PropTypes from "prop-types";
-import { startGame } from "../engine/core/game";
+import Game from "../engine/core/game";
 
-const Canvas = ({width, height, startGame}) => {
-    const canvasRef = useRef(null);
+
+const Canvas = ({width, height}) => {
+    const canvasRef = useRef();
 
     useEffect(() => {
         const canvas = canvasRef.current;
 
         // Initialize game engine
-        const game = startGame(canvas);
-
-        return() => {
-            // Clean up game engine
-            if(game && game.cleanup) {
-                game.cleanup();
-            }
-        };
-    }, [startGame]);
+        const game = new Game(canvas);
+        game.start();
+    }, []);
 
     return (
         <canvas
@@ -32,7 +27,6 @@ const Canvas = ({width, height, startGame}) => {
 Canvas.propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
-    startGame: PropTypes.func.isRequired,
 
 };
 
