@@ -2,6 +2,9 @@ export default class InputHandler {
     constructor() {
         // Store active keys
         this.keys = new Set();
+        this.conflictingKeys = [
+            ['ArrowLeft', 'ArrowRight'],
+        ];
 
         // Create event listeners
         window.addEventListener('keydown', (event) => this.keyDown(event));
@@ -11,6 +14,14 @@ export default class InputHandler {
     // add key to the set
     keyDown(event) {
         this.keys.add(event.key);
+
+        // reslove conflicts
+        this.conflictingKeys.forEach(([key1, key2]) => {
+            if(this.keys.has(key1) && this.keys.has(key2)){
+                this.keys.delete(key1);
+                this.keys.delete(key2);
+            }
+        })
     }
 
     // remove key from the set

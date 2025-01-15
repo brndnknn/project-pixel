@@ -32,15 +32,24 @@ export default class Player {
     }
 
     handleInput(input) {
+        this.vx = 0;
             if(input.isKeyPressed("ArrowRight")){
-                this.vx += this.speed;
-            }else{
-                this.vx = 0;
+                this.moveRight();
             }
             if(input.isKeyPressed("ArrowLeft")){
-                this.vx -= this.speed;
-            }else{
-                this.vy = 0;
+                this.moveLeft();
             }
+        }
+
+        moveRight(){
+            this.vx = this.speed;
+        }
+
+        moveLeft(){
+            this.vx = 0 - this.speed;
+        }
+
+        jump(){
+
         }
 }
