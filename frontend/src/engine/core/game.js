@@ -2,6 +2,7 @@ import Player from "./player.js";
 import InputHandler from "./inputHandler.js";
 import Level from "./level.js";
 import PhysicsEngine from "./physicsEngine.js";
+import CollisionHandler from "./collisionHandler.js";
 
 export default class Game {
     constructor(canvas) {
@@ -10,7 +11,6 @@ export default class Game {
         this.player = new Player(50, 50, 50, 50, 1, 'blue');
         this.lastTime = 0;
         this.input = new InputHandler();
-        this.physicsEngine = new PhysicsEngine();
 
         const levelGrid = [
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -42,10 +42,17 @@ export default class Game {
 
         this.level = new Level(levelGrid, tileSize, keys);
         this.objects = [this.player];
+        this. physicsEngine;
+        this.collisionHandler
+
+
         
     }
 
     start() {
+
+        this.collisionHandler = new CollisionHandler(this. level);
+        this.physicsEngine = new PhysicsEngine(5, this.collisionHandler);
         requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
     }
 
