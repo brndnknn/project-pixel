@@ -6,7 +6,7 @@ function App() {
     return (
         <div>
             <h1>2D Game Engine</h1>
-            <Canvas width={800} height={600} />
+            <Canvas width={800} height={640} />
         </div>
     );
 
