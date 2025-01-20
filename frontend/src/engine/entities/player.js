@@ -1,6 +1,6 @@
-import PhysicsObject from "./physicsObject";
+import PhysicsEntity from "./physicsEntity";
 
-export default class Player extends PhysicsObject {
+export default class Player extends PhysicsEntity {
     constructor(x, y, width, height, mass, color){
         super(x, y, width, height, mass);
         this.color = color;

@@ -1,4 +1,4 @@
-export default class PhysicsObject {
+export default class PhysicsEntity {
     constructor(x, y, width, height, mass = 1) {
         this.x = x;
         this.y = y;

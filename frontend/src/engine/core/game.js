@@ -1,8 +1,8 @@
-import Player from "./player.js";
+import Player from "../entities/player.js";
 import InputHandler from "./inputHandler.js";
-import Level from "./level.js";
+import Level from "../level/level.js";
 import PhysicsEngine from "./physicsEngine.js";
-import CollisionHandler from "./collisionHandler.js";
+import CollisionHandler from "../collisions/collisionHandler.js";
 
 export default class Game {
     constructor(canvas) {
@@ -42,7 +42,7 @@ export default class Game {
 
         this.level = new Level(levelGrid, tileSize, keys);
         this.objects = [this.player];
-        this. physicsEngine;
+        this.physicsEngine;
         this.collisionHandler
 
 
