@@ -14,6 +14,10 @@ export default class PhysicsEngine {
 
             this.collisionHandler.handleCollisions(entity);
 
+            if(entity.isGrounded){
+                entity.isGrounded = this.collisionHandler.revalidateGroundedState(entity);
+            }
+
         });
     }
 }

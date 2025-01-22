@@ -19,9 +19,10 @@ export default class CollisionHandler {
         for (const tile of nearbyTiles) {
             if (!tile.isSolid) continue;
              const tileBox = tile.getBoundingBox();
-
+             
              if(this.isOverlapping(entityBox, tileBox)) {
-                this.resolveCollision(physicsEntity, entityBox, tileBox);
+
+                this.resolveCollision(physicsEntity, entityBox, tileBox, tile);
              }
 
              // refresh bounding box to prevent double correction
@@ -29,7 +30,7 @@ export default class CollisionHandler {
         }
     }
 
-    resolveCollision(physicsEntity, entityBox, tileBox) {
+    resolveCollision(physicsEntity, entityBox, tileBox, tile) {
         const overlapX = Math.min(entityBox.right - tileBox.left, tileBox.right - entityBox.left);
         const overlapY = Math.min(entityBox.bottom - tileBox.top, tileBox.bottom - entityBox.top);
 
@@ -41,6 +42,8 @@ export default class CollisionHandler {
                 physicsEntity.x += overlapX; // move right;
             }
             physicsEntity.vX = 0;
+            console.log('horizontal collision', tile)
+            console.log()
         } else {
             // vertical collision
             if( entityBox.top < tileBox.top) {
@@ -50,8 +53,21 @@ export default class CollisionHandler {
                 physicsEntity.y += overlapY;
             }
             physicsEntity.vY = 0;
+            console.log('vertical collison', tile)
         }
     }
 
+    revalidateGroundedState(physicsEntity) {
+        const entityBox = physicsEntity.getBoundingBox();
+        const tilesBelow = this.level.getTilesBelow(entityBox);
+
+        // if any tile below is solid entity is still grounded
+        for(const tile of tilesBelow) {
+            if(tile.isSolid) return true;
+        }
+
+        // if no tile below is solid entity is not grounded
+        return false;
+    }
 
 }

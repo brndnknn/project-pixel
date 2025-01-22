@@ -61,4 +61,19 @@ export default class Level {
         return tiles;
     }
 
+    // returns tiles below a given bounding box
+    getTilesBelow(boundingBox) {
+        const row = Math.floor((boundingBox.bottom + 1) / this.tileSize);
+        const startCol = Math.floor(boundingBox.left / this.tileSize);
+        const endCol = Math.ceil(boundingBox.right / this.tileSize);
+
+        const tiles = [];
+        for ( let col = startCol; col < endCol; col++){
+            const tile = this.grid[row][col];
+            if(tile) tiles.push(tile);
+        }
+        return tiles;
+
+    }
+
 }
