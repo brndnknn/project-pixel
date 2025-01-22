@@ -76,4 +76,30 @@ export default class Level {
 
     }
 
+    getTilesRight(boundingBox) {
+        const col = Math.floor((boundingBox.right) / this.tileSize);
+        const startRow = Math.floor(boundingBox.top / this.tileSize);
+        const endRow = Math.ceil(boundingBox.bottom / this.tileSize);
+
+        const tiles = [];
+        for ( let row = startRow; row < endRow; row++) {
+            const tile = this.grid[row][col];
+            if(tile) tiles.push(tile);
+        }
+        return tiles;
+    }
+
+    getTilesLeft(boundingBox) {
+        const col = Math.floor((boundingBox.left - 1) / this.tileSize);
+        const startRow = Math.floor(boundingBox.top / this.tileSize);
+        const endRow = Math.ceil(boundingBox.bottom / this.tileSize);
+
+        const tiles = [];
+        for ( let row = startRow; row < endRow; row++) {
+            const tile = this.grid[row][col];
+            if(tile) tiles.push(tile);
+        }
+        return tiles;
+    }
+
 }

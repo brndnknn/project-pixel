@@ -8,7 +8,10 @@ export default class Player extends PhysicsEntity {
         this.vX = 0;
         this.vY = 0;
         this.isGrounded = false;
-        
+        this.blocked = {
+            right: false,
+            left: false
+        };
     };
 
     update(deltaTime, input) {
@@ -25,14 +28,13 @@ export default class Player extends PhysicsEntity {
 
     handleInput(input) {
         this.vX = 0;
-            if(input.isKeyPressed("ArrowRight")){
+            if(input.isKeyPressed("ArrowRight") && !this.blocked.right){
                 this.moveRight();
             }
-            if(input.isKeyPressed("ArrowLeft")){
+            if(input.isKeyPressed("ArrowLeft") && !this.blocked.left){
                 this.moveLeft();
             }
             if(input.isKeyPressed(" ") && this.isGrounded){
-                console.log("space bar")
                 this.jump();
             }
         }
@@ -42,13 +44,11 @@ export default class Player extends PhysicsEntity {
         }
 
         moveLeft(){
-            this.vX = 0 - this.speed;
+            this.vX = -200;
         }
 
         jump(){
             this.vY = 0 - this.speed;
             this.isGrounded = false;
-            console.log(this.vY);
-
         }
 }

@@ -10,6 +10,9 @@ export default class PhysicsEngine {
             if(!entity.isGrounded){
                 entity.applyForce(0, this.gravity * entity.mass);
             }
+
+            entity.resetHorizontalBlocks();
+            this.collisionHandler.checkHorizontalBlock(entity);
             entity.update(deltaTime, input);
 
             this.collisionHandler.handleCollisions(entity);

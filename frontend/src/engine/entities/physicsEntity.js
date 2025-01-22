@@ -8,6 +8,10 @@ export default class PhysicsEntity {
         this.vX = 0;
         this.vY = 0;
         this.isGrounded = false;
+        this.blocked = {
+            right: false,
+            left: false
+        };
     }
 
     applyForce(forceX, forceY) {
@@ -27,5 +31,10 @@ export default class PhysicsEntity {
             right: this.x + this.width,
             bottom: this.y + this.height
         };
+    }
+
+    resetHorizontalBlocks(){
+        this.blocked.right = false;
+        this.blocked.left = false;
     }
 }
