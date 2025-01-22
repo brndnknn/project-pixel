@@ -52,7 +52,7 @@ export default class Game {
     start() {
 
         this.collisionHandler = new CollisionHandler(this. level);
-        this.physicsEngine = new PhysicsEngine(5, this.collisionHandler);
+        this.physicsEngine = new PhysicsEngine(3, this.collisionHandler);
         requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
     }
 
@@ -67,12 +67,8 @@ export default class Game {
     }
 
     update(deltaTime, input) {
-        // Update the player 
-        //this.player.update(deltaTime, input)
 
-        // console.log(this.objects)
-
-        this.physicsEngine.update(this.objects, deltaTime, input, this.level);
+        this.physicsEngine.update(this.objects, deltaTime, input);
     }
 
     render() {

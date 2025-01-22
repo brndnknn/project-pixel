@@ -1,18 +1,18 @@
 export default class PhysicsEngine {
-    constructor( gravity = 2, collisionHandler) {
+    constructor( gravity = 1.5, collisionHandler) {
         this.gravity = gravity;
         this.collisionHandler = collisionHandler;
     }
 
-    update(objects, deltaTime, input, level) {
-        objects.forEach(object => {
+    update(entities, deltaTime, input) {
+        entities.forEach(entity => {
 
-            if(!object.isGrounded){
-                object.applyForce(0, this.gravity * object.mass);
+            if(!entity.isGrounded){
+                entity.applyForce(0, this.gravity * entity.mass);
             }
-            object.update(deltaTime, input);
+            entity.update(deltaTime, input);
 
-            this.collisionHandler.handleCollisions(object, level);
+            this.collisionHandler.handleCollisions(entity);
 
         });
     }

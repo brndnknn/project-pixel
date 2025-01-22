@@ -4,7 +4,7 @@ export default class Player extends PhysicsEntity {
     constructor(x, y, width, height, mass, color){
         super(x, y, width, height, mass);
         this.color = color;
-        this.speed = 200; // Pixels per second
+        this.speed = 300; // Pixels per second
         this.vX = 0;
         this.vY = 0;
         this.isGrounded = false;

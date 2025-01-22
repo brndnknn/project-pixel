@@ -12,43 +12,44 @@ export default class CollisionHandler {
         );
     }
 
-    handleCollisions(physicsObject) {
-        const objectBox = physicsObject.getBoundingBox();
-        const nearbyTiles = this.level.getTilesInArea(objectBox);
+    handleCollisions(physicsEntity) {
+        let entityBox = physicsEntity.getBoundingBox();
+        const nearbyTiles = this.level.getTilesInArea(entityBox);
 
         for (const tile of nearbyTiles) {
             if (!tile.isSolid) continue;
              const tileBox = tile.getBoundingBox();
 
-             if(this.isOverlapping(objectBox, tileBox)) {
-                this.resolveCollision(physicsObject, objectBox, tileBox);
+             if(this.isOverlapping(entityBox, tileBox)) {
+                this.resolveCollision(physicsEntity, entityBox, tileBox);
              }
+
+             // refresh bounding box to prevent double correction
+             entityBox = physicsEntity.getBoundingBox();
         }
     }
 
-    resolveCollision(physicsObject, objectBox, tileBox) {
-        const overlapX = Math.min(objectBox.right - tileBox.left, tileBox.right - objectBox.left);
-        const overlapY = Math.min(objectBox.bottom - tileBox.top, tileBox.bottom - objectBox.top);
-        console.log("overlapX", overlapX);
-        console.log("overlapY", overlapY);
+    resolveCollision(physicsEntity, entityBox, tileBox) {
+        const overlapX = Math.min(entityBox.right - tileBox.left, tileBox.right - entityBox.left);
+        const overlapY = Math.min(entityBox.bottom - tileBox.top, tileBox.bottom - entityBox.top);
 
         if (overlapX < overlapY) {
             // Horizontal collision
-            if (objectBox.left < tileBox.left) {
-                physicsObject.x -= overlapX; // move left
+            if (entityBox.left < tileBox.left) {
+                physicsEntity.x -= overlapX; // move left
             } else {
-                physicsObject.x += overlapX; // move right;
+                physicsEntity.x += overlapX; // move right;
             }
-            physicsObject.vX = 0;
+            physicsEntity.vX = 0;
         } else {
             // vertical collision
-            if( objectBox.top < tileBox.top) {
-                physicsObject.y -= overlapY;
-                physicsObject.isGrounded = true;
+            if( entityBox.top < tileBox.top) {
+                physicsEntity.y -= overlapY;
+                physicsEntity.isGrounded = true;
             } else {
-                physicsObject.y += overlapY;
+                physicsEntity.y += overlapY;
             }
-            physicsObject.vY = 0;
+            physicsEntity.vY = 0;
         }
     }
 
