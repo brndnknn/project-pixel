@@ -6,7 +6,7 @@ class PhysicsEngine {
     this.world = this.engine.world;
 
     // Optional: Configure gravity
-    this.engine.gravity.y = 1.5;
+    this.engine.gravity.y = 2;
   }
 
   update(deltaTime) {

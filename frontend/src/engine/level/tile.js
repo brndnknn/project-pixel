@@ -18,7 +18,10 @@ export default class Tile {
         );
 
         // Add the tile body to the Matter.js world
-        Matter.World.add(PhysicsEngine.world, this.body);
+        if(isSolid){
+            Matter.World.add(PhysicsEngine.world, this.body);
+        }
+        
     }
 
     render(context) {

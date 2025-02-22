@@ -52,7 +52,7 @@ export default class Game {
         ];
         const tileSize = 32;
         const keys = [
-            { id: 0, color: "White", solid: false },
+            { id: 0, color: "White", solid: false},
             { id: 1, color: "Black", solid: true },
         ];
 
@@ -61,7 +61,7 @@ export default class Game {
 
     // Create player with physics
     createPlayer() {
-        return new Player(50, 50, 50, 50, 1, "blue");
+        return new Player(100, 100, 50, 50, 1, "blue");
     }
 
     // Setup collision handling with Matter.js events
@@ -85,6 +85,8 @@ export default class Game {
 
     // Handle input and update entities
     update(input) {
+        
+        Matter.Engine.update(PhysicsEngine.engine);
         this.player.update(input);
     }
 
@@ -93,7 +95,7 @@ export default class Game {
         this.lastTime = timestamp;
         console.log("Player position:", this.player.body.position);
 
-
+        
 
         // Update player and input
         this.update(this.input);
@@ -110,8 +112,7 @@ export default class Game {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.level.render(this.context);
         this.player.render(this.context);
-        this.context.fillStyle = "red";
-this.context.fillRect(50, 50, 20, 20); // Temporary debug rectangle
+
 
     }
 }

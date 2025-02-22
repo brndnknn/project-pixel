@@ -11,7 +11,7 @@ export default class Player extends PhysicsEntity {
         this.speed = 5; // Adjusted for Matter.js scale
 
         // Add the player body to the Matter.js world
-        Matter.World.add(PhysicsEngine.world, this.body);
+        //Matter.World.add(PhysicsEngine.world, this.body);
     }
 
     handleInput(input) {
