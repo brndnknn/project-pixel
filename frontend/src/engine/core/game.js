@@ -19,8 +19,6 @@ export default class Game {
         // Start the Matter.js physics engine
         Matter.Runner.run(PhysicsEngine.engine);
 
-        // Set up collision handling
-        this.setupCollisionHandling();
 
         // Start game loop
         requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
@@ -64,25 +62,6 @@ export default class Game {
         return new Player(100, 100, 50, 50, 1, "blue");
     }
 
-    // Setup collision handling with Matter.js events
-    setupCollisionHandling() {
-        Matter.Events.on(PhysicsEngine.engine, "collisionStart", (event) => {
-            event.pairs.forEach(({ bodyA, bodyB }) => {
-                if ((bodyA.label === "player" && bodyB.isStatic) || (bodyB.label === "player" && bodyA.isStatic)) {
-                    this.player.onGround = true; // Enable jumping when colliding with ground
-                }
-            });
-        });
-
-        Matter.Events.on(PhysicsEngine.engine, "collisionEnd", (event) => {
-            event.pairs.forEach(({ bodyA, bodyB }) => {
-                if ((bodyA.label === "player" && bodyB.isStatic) || (bodyB.label === "player" && bodyA.isStatic)) {
-                    this.player.onGround = false; // Disable jumping when leaving ground
-                }
-            });
-        });
-    }
-
     // Handle input and update entities
     update(input) {
         
@@ -93,9 +72,6 @@ export default class Game {
     // Main game loop (runs every frame)
     gameLoop(timestamp) {
         this.lastTime = timestamp;
-        console.log("Player position:", this.player.body.position);
-
-        
 
         // Update player and input
         this.update(this.input);

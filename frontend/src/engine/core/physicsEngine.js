@@ -9,9 +9,7 @@ class PhysicsEngine {
     this.engine.gravity.y = 2;
   }
 
-  update(deltaTime) {
-    Matter.Engine.update(this.engine, deltaTime * 1000);
-  }
+
 }
 
 export default new PhysicsEngine();
