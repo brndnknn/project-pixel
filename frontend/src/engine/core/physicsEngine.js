@@ -1,26 +1,17 @@
-export default class PhysicsEngine {
-    constructor( gravity = 1.5, collisionHandler) {
-        this.gravity = gravity;
-        this.collisionHandler = collisionHandler;
-    }
+import Matter from "matter-js";
 
-    update(entities, deltaTime, input) {
-        entities.forEach(entity => {
+class PhysicsEngine {
+  constructor() {
+    this.engine = Matter.Engine.create();
+    this.world = this.engine.world;
 
-            if(!entity.isGrounded){
-                entity.applyForce(0, this.gravity * entity.mass);
-            }
+    // Optional: Configure gravity
+    this.engine.gravity.y = 1.5;
+  }
 
-            entity.resetHorizontalBlocks();
-            this.collisionHandler.checkHorizontalBlock(entity);
-            entity.update(deltaTime, input);
-
-            this.collisionHandler.handleCollisions(entity);
-
-            if(entity.isGrounded){
-                entity.isGrounded = this.collisionHandler.revalidateGroundedState(entity);
-            }
-
-        });
-    }
+  update(deltaTime) {
+    Matter.Engine.update(this.engine, deltaTime * 1000);
+  }
 }
+
+export default new PhysicsEngine();

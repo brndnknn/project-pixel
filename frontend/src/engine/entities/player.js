@@ -1,54 +1,54 @@
+import Matter from "matter-js";
 import PhysicsEntity from "./physicsEntity";
+import PhysicsEngine from "../core/physicsEngine";
 
 export default class Player extends PhysicsEntity {
-    constructor(x, y, width, height, mass, color){
-        super(x, y, width, height, mass);
+    constructor(x, y, width, height, mass, color) {
+        // Create a Matter.js rectangle body for the player
+        super(x, y, width, height, mass, { restitution: 0.1, friction: 0.1 });
+
         this.color = color;
-        this.speed = 300; // Pixels per second
-        this.vX = 0;
-        this.vY = 0;
-        this.isGrounded = false;
-        this.blocked = {
-            right: false,
-            left: false
-        };
-    };
+        this.speed = 5; // Adjusted for Matter.js scale
 
-    update(deltaTime, input) {
-
-        this.handleInput(input);
-        super.update(deltaTime);
-    }
-
-    draw(context) {
-        // draw player as a rectangle
-        context.fillStyle = this.color;
-        context.fillRect(this.x, this.y, this.width, this.height);
+        // Add the player body to the Matter.js world
+        Matter.World.add(PhysicsEngine.world, this.body);
     }
 
     handleInput(input) {
-        this.vX = 0;
-            if(input.isKeyPressed("ArrowRight") && !this.blocked.right){
-                this.moveRight();
-            }
-            if(input.isKeyPressed("ArrowLeft") && !this.blocked.left){
-                this.moveLeft();
-            }
-            if(input.isKeyPressed(" ") && this.isGrounded){
-                this.jump();
-            }
+        let velocity = { x: 0, y: this.body.velocity.y };
+    
+        if (input.isKeyPressed("ArrowRight")) {
+            velocity.x = this.speed;
         }
+        if (input.isKeyPressed("ArrowLeft")) {
+            velocity.x = -this.speed;
+        }
+        if (input.isKeyPressed(" ") && this.isGrounded) {
+            this.jump();
+        }
+    
+        // Apply new velocity
+        Matter.Body.setVelocity(this.body, velocity);
+    }
 
-        moveRight(){
-            this.vX = this.speed;
-        }
+    jump() {
+        const jumpForce = { x: 0, y: -0.2 }; // Adjust as needed
+        Matter.Body.applyForce(this.body, this.body.position, jumpForce);
+        this.isGrounded = false;
+    }
+    
+    update(input) {
+        this.handleInput(input);
+    }
 
-        moveLeft(){
-            this.vX = -200;
-        }
+    render(context) {
+        const { x, y } = this.body.position;
 
-        jump(){
-            this.vY = 0 - this.speed;
-            this.isGrounded = false;
-        }
+        context.fillStyle = this.color;
+        context.fillRect(
+            x - this.width / 2, 
+            y - this.height / 2,
+            this.width,
+            this.height);
+    }
 }

@@ -1,40 +1,19 @@
-export default class PhysicsEntity {
-    constructor(x, y, width, height, mass = 1) {
-        this.x = x;
-        this.y = y;
-        this.width = width
-        this.height = height;
-        this.mass = mass; 
-        this.vX = 0;
-        this.vY = 0;
-        this.isGrounded = false;
-        this.blocked = {
-            right: false,
-            left: false
-        };
-    }
+import Matter from "matter-js";
+import PhysicsEngine from "../core/physicsEngine";
 
-    applyForce(forceX, forceY) {
-        this.vX += forceX / this.mass;
-        this.vY += forceY / this.mass;
-    }
+class PhysicsEntity {
+  constructor(x, y, width, height, mass = 1, options = {}) {
+    this.body = Matter.Bodies.rectangle(x, y, width, height, { mass, ...options });
+    Matter.World.add(PhysicsEngine.world, this.body);
+  }
 
-    update(deltaTime) {
-        this.x += this.vX * deltaTime;
-        this.y += this.vY * deltaTime;
-    }
+  applyForce(forceX, forceY) {
+    Matter.Body.applyForce(this.body, this.body.position, { x: forceX, y: forceY });
+  }
 
-    getBoundingBox(){
-        return {
-            left: this.x, 
-            top: this.y, 
-            right: this.x + this.width,
-            bottom: this.y + this.height
-        };
-    }
-
-    resetHorizontalBlocks(){
-        this.blocked.right = false;
-        this.blocked.left = false;
-    }
+  get position() {
+    return this.body.position;
+  }
 }
+
+export default PhysicsEntity;

@@ -11,7 +11,7 @@ const Canvas = ({width, height}) => {
 
         // Initialize game engine
         const game = new Game(canvas);
-        game.start();
+        //game.start();
     }, []);
 
     return (
