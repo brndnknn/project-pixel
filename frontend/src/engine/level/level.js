@@ -1,13 +1,29 @@
 import Tile from "./tile";
 
 export default class Level {
-    constructor( tileMap, tileSize, keys){
+    constructor(levelData){
         this.grid = []; 
-        this.tileSize = tileSize;
-        this.keys = keys;
-        this.initGrid(tileMap);
+        this.tileMap = levelData["Grid"]
+        this.keys = levelData["keys"]
+        this.tileSize = levelData["tileSize"]
+        //console.log(this.tileMap)
+        this.initGrid(this.tileMap);
+        
     }
 
+    // loadLevel(levelName){
+    //     let levelString = `./src/assets/${levelName}.json`
+    //     fetch(levelString)
+    //     .then(response => {
+    //         if (!response.ok) {
+    //             throw new Error(`HTTP error! Status: ${response.status}`);
+    //         }
+    //         return response.json();  
+    //     })
+    //     .then(data => console.log(data))  
+    //     .catch(error => console.error('Failed to fetch data:', error)); 
+
+    // }
     initGrid(tileMap){
         for (let row = 0; row < tileMap.length; row++) {
             this.grid[row] = [];
