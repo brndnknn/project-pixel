@@ -1,10 +1,11 @@
 import PhysicsEntity from "./physicsEntity";
+import { PLAYER } from "../utils/constants";
 
 export default class Player extends PhysicsEntity {
-    constructor(x, y, width, height, mass, color){
-        super(x, y, width, height, mass);
-        this.color = color;
-        this.speed = 300; // Pixels per second
+    constructor(x, y){
+        super(x, y, PLAYER.WIDTH, PLAYER.HEIGHT, PLAYER.MASS);
+        this.color = PLAYER.COLOR;
+        this.speed = PLAYER.SPEED; // Pixels per second
         this.vX = 0;
         this.vY = 0;
         this.isGrounded = false;
@@ -44,11 +45,11 @@ export default class Player extends PhysicsEntity {
         }
 
         moveLeft(){
-            this.vX = -200;
+            this.vX = -this.speed;
         }
 
         jump(){
-            this.vY = 0 - this.speed;
+            this.vY = PLAYER.JUMP_FORCE;
             this.isGrounded = false;
         }
 }

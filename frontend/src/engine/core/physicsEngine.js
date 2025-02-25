@@ -1,5 +1,7 @@
+import { GRAVITY } from "../utils/constants";
+
 export default class PhysicsEngine {
-    constructor( gravity = 1.5, collisionHandler) {
+    constructor( gravity = GRAVITY, collisionHandler) {
         this.gravity = gravity;
         this.collisionHandler = collisionHandler;
     }

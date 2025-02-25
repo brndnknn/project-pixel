@@ -9,7 +9,7 @@ export default class Game {
     constructor(canvas) {
         this.canvas = canvas;
         this.context = canvas.getContext('2d');
-        this.player = new Player(50, 50, 50, 50, 1, 'blue');
+        this.player = new Player(50, 50, 50, 50, 1);
         this.lastTime = 0;
         this.input = new InputHandler();
         this.objects = [this.player];
@@ -18,9 +18,6 @@ export default class Game {
         this.levelData;
         this.physicsEngine;
         this.collisionHandler;
-
-
-        
     }
 
     async start() {

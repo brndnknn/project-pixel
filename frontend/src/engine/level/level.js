@@ -1,39 +1,25 @@
 import Tile from "./tile";
+import { TILE_KEYS } from "../utils/constants";
+import { TILE_SIZE } from "../utils/constants";
 
 export default class Level {
     constructor(levelData){
         this.grid = []; 
         this.tileMap = levelData["Grid"]
-        this.keys = levelData["keys"]
-        this.tileSize = levelData["tileSize"]
-        //console.log(this.tileMap)
+        this.keys = TILE_KEYS;
+        this.tileSize = TILE_SIZE;
         this.initGrid(this.tileMap);
         
     }
 
-    // loadLevel(levelName){
-    //     let levelString = `./src/assets/${levelName}.json`
-    //     fetch(levelString)
-    //     .then(response => {
-    //         if (!response.ok) {
-    //             throw new Error(`HTTP error! Status: ${response.status}`);
-    //         }
-    //         return response.json();  
-    //     })
-    //     .then(data => console.log(data))  
-    //     .catch(error => console.error('Failed to fetch data:', error)); 
-
-    // }
     initGrid(tileMap){
         for (let row = 0; row < tileMap.length; row++) {
             this.grid[row] = [];
             for (let col= 0; col < tileMap[row].length; col++){
                 const tileId = tileMap[row][col];
-                const key = this.keys.find((k) => k.id === tileId);
+                const key = this.keys[tileId];
 
-                const tile = key
-                    ? new Tile(tileId, col * this.tileSize, row * this.tileSize, this.tileSize, key.solid, key.color)
-                    : new Tile(tileId, col * this.tileSize, row * this.tileSize, this.tileSize, key.solid, key.color)
+                const tile = new Tile(tileId, col * this.tileSize, row * this.tileSize, this.tileSize, key.solid, key.color)
                 
                     this.grid[row][col] = tile;
             }
