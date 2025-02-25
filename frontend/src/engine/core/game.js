@@ -12,12 +12,14 @@ export default class Game {
         this.input = new InputHandler();
         this.lastTime = 0;
 
+
+
         // Initialize game objects
         this.level = this.createLevel();
         this.player = this.createPlayer();
 
         // Start the Matter.js physics engine
-        Matter.Runner.run(PhysicsEngine.engine);
+        //Matter.Runner.run(PhysicsEngine.engine);
 
 
         // Start game loop
@@ -27,7 +29,7 @@ export default class Game {
     // Create level using Matter.js tiles
     createLevel() {
         const levelGrid = [
-            [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -65,14 +67,16 @@ export default class Game {
     // Handle input and update entities
     update(input) {
         
-        Matter.Engine.update(PhysicsEngine.engine);
+        //Matter.Engine.update(PhysicsEngine.engine);
         this.player.update(input);
     }
 
     // Main game loop (runs every frame)
     gameLoop(timestamp) {
+        const delta = timestamp - this.lastTime;
         this.lastTime = timestamp;
 
+        Matter.Engine.update(PhysicsEngine.engine, delta)
         // Update player and input
         this.update(this.input);
 
@@ -82,6 +86,10 @@ export default class Game {
         // Request next frame
         requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
     }
+
+
+
+
 
     // Render level and player
     render() {
