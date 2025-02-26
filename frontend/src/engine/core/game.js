@@ -6,7 +6,14 @@ import CollisionHandler from "../collisions/collisionHandler.js";
 import { loadLevel } from "../utils/levelLoader.js";
 import { FIXED_TIMESTAMP } from "../utils/constants.js";
 
+/**
+ * Main game class that orchestrates initialization, updates, and rendering.
+ */
 export default class Game {
+    /**
+     * Creates a new Game intstance.
+     * @param {HTMLCanvasElement} canvas - The canvas element used for rendering the game. 
+     */
     constructor(canvas) {
         this.canvas = canvas;
         this.context = canvas.getContext('2d');
@@ -16,14 +23,19 @@ export default class Game {
         this.input = new InputHandler();
         this.objects = [this.player];
 
+        // Level and engine components to be initialized later. 
         this.level;
         this.levelData;
         this.physicsEngine;
         this.collisionHandler;
     }
 
+        /**
+     * Initializes and starts the game.
+     * Loads level data asynchronously, sets up collision and physics handlers,
+     * and begins the game loop.
+     */
     async start() {
-
         const levelData = await loadLevel('levelData');
         this.level = new Level(levelData);
 
@@ -32,6 +44,15 @@ export default class Game {
         requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
     }
 
+
+    /**
+     * Main game loop for updating physics and rendering.
+     *
+     * Calculates delta time, accumulates time to run fixed-timestep physics updates,
+     * and then renders the frame using interpolation (alpha) for smooth transitions.
+     *
+     * @param {DOMHighResTimeStamp} timestamp - The current time provided by requestAnimationFrame.
+     */
     gameLoop(timestamp) {
         // Calculate the elapsed time in seconds
         const deltaTime = (timestamp - this.lastTime) / 1000;
@@ -53,13 +74,17 @@ export default class Game {
         // Render the current state, optionally using alpha for interpolation
         this.render(alpha);
 
-        //this.update(deltaTime, this.input);
-        //this.render();
-
         requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
     }
 
-
+    /**
+     * Renders the game state onto the canvas.
+     *
+     * Clears the canvas and draws the level and the player.
+     * Optionally, interpolation can be applied for smoother animations.
+     *
+     * @param {number} alpha - The interpolation factor (between 0 and 1).
+     */
     render(alpha) {
         // clear canvas
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -74,6 +99,12 @@ export default class Game {
         this.player.draw(this.context);
     }
 
+    /**
+     * Renders the level grid manually.
+     *
+     * Iterates over the level grid and draws tiles with a value of 1.
+     * This method serves as an alternative rendering option for the level.
+     */
     renderLevel() {
         for (let row = 0; row < this.level.grid.length; row++) {
             for (let col = 0; col < this.level.grid[row].length; col++) {
