@@ -8,6 +8,15 @@ export const PLAYER = {
     MASS: 1
 }
 
+// Enemy setttings
+export const ENEMY = {
+    COLOR: 'RED',
+    JUMP_FORCE: -300,
+    WIDTH: 50,
+    HEIGHT: 50,
+    MASS: 1
+}
+
 // // Level settings
 export const TILE_SIZE = 32;             // Default tile size
 export const TILE_KEYS = {              // Default tile keys

@@ -1,4 +1,5 @@
 import Player from "../entities/player.js";
+import Enemy from "../entities/enemy.js";
 import EntityManager from "../entities/entityManager.js";
 import InputHandler from "./inputHandler.js";
 import Level from "../level/level.js";
@@ -18,7 +19,8 @@ export default class Game {
     constructor(canvas) {
         this.canvas = canvas;
         this.context = canvas.getContext('2d');
-        this.player = new Player(50, 50, 50, 50, 1);
+        this.player = new Player(50, 50);
+        this.enemy = new Enemy(650, 50);
         this.lastTime = 0;
         this.accumulator = 0;
         this.input = new InputHandler();
@@ -42,6 +44,7 @@ export default class Game {
         this.level = new Level(levelData);
 
         this.entityManager.addEntity(this.player);
+        this.entityManager.addEntity(this.enemy);
         this.collisionHandler = new CollisionHandler(this.level);
         this.physicsEngine = new PhysicsEngine(3, this.collisionHandler);
         requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
