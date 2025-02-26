@@ -1,4 +1,5 @@
 import Player from "../entities/player.js";
+import EntityManager from "../entities/entityManager.js";
 import InputHandler from "./inputHandler.js";
 import Level from "../level/level.js";
 import PhysicsEngine from "./physicsEngine.js";
@@ -21,7 +22,8 @@ export default class Game {
         this.lastTime = 0;
         this.accumulator = 0;
         this.input = new InputHandler();
-        this.objects = [this.player];
+        this.entityManager = new EntityManager();
+
 
         // Level and engine components to be initialized later. 
         this.level;
@@ -39,6 +41,7 @@ export default class Game {
         const levelData = await loadLevel('levelData');
         this.level = new Level(levelData);
 
+        this.entityManager.addEntity(this.player);
         this.collisionHandler = new CollisionHandler(this.level);
         this.physicsEngine = new PhysicsEngine(3, this.collisionHandler);
         requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
@@ -61,18 +64,16 @@ export default class Game {
         // Add the elapsed itme to the accumulator
         this.accumulator += deltaTime;
 
+        const activeEnities = this.entityManager.getEntities();
+
         // Update the physics engine with fixed timestep steps
         while (this.accumulator >= FIXED_TIMESTAMP) {
             // update physics using the fixed timestep
-            this.physicsEngine.update(this.objects, FIXED_TIMESTAMP, this.input);
+            this.physicsEngine.update(activeEnities, FIXED_TIMESTAMP, this.input);
             this.accumulator -= FIXED_TIMESTAMP;
         }
-
-        // Calculate interpolation factor (0 to 1)
-        const alpha = this.accumulator / FIXED_TIMESTAMP;
-
-        // Render the current state, optionally using alpha for interpolation
-        this.render(alpha);
+        
+        this.render();
 
         requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
     }
@@ -81,22 +82,13 @@ export default class Game {
      * Renders the game state onto the canvas.
      *
      * Clears the canvas and draws the level and the player.
-     * Optionally, interpolation can be applied for smoother animations.
-     *
-     * @param {number} alpha - The interpolation factor (between 0 and 1).
      */
-    render(alpha) {
+    render() {
         // clear canvas
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Optionally, use 'alpha' to interpolate between previous and current state
-        // For instance, if your entity stores previousX, previousY and current x, y:
-        // let interpolatedX = this.player.previousX * (1 - alpha) + this.player.x * alpha;
-        // let interpolatedY = this.player.previousY * (1 - alpha) + this.player.y * alpha;
-        // Then draw your entity at (interpolatedX, interpolatedY).
-
         this.level.render(this.context);
-        this.player.draw(this.context);
+        this.entityManager.renderEntities(this.context);
     }
 
     /**
