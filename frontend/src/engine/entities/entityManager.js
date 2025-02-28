@@ -29,13 +29,12 @@ export default class EntityManager {
 
     /**
      * Updates all managed entities.
-     * @param {number} deltaTime - The elapsed time since the last update.
-     * @param {Object} input - The input handler to pass to entities.
+     * Checks each entity's isDead flag, removes any that return true
      */
-    updateEntities(deltaTime, input) {
+    updateEntities() {
         this.entities.forEach(entity => {
-            if (typeof entity.update === 'function') {
-                entity.update(deltaTime, input);
+            if (entity.isDead === true) {
+                this.removeEntity(entity);
             }
         });
     }

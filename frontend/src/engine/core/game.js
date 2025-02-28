@@ -5,6 +5,7 @@ import InputHandler from "./inputHandler.js";
 import Level from "../level/level.js";
 import PhysicsEngine from "./physicsEngine.js";
 import CollisionHandler from "../collisions/collisionHandler.js";
+import EntityCollisionHandler from "../collisions/entityCollisionHandler.js";
 import { loadLevel } from "../utils/levelLoader.js";
 import { FIXED_TIMESTAMP } from "../utils/constants.js";
 
@@ -32,6 +33,7 @@ export default class Game {
         this.levelData;
         this.physicsEngine;
         this.collisionHandler;
+        this.entityCollisionHandler;
     }
 
         /**
@@ -46,6 +48,7 @@ export default class Game {
         this.entityManager.addEntity(this.player);
         this.entityManager.addEntity(this.enemy);
         this.collisionHandler = new CollisionHandler(this.level);
+        this.entityCollisionHandler = new EntityCollisionHandler(this.level);
         this.physicsEngine = new PhysicsEngine(3, this.collisionHandler);
         requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
     }
@@ -66,6 +69,8 @@ export default class Game {
 
         // Add the elapsed itme to the accumulator
         this.accumulator += deltaTime;
+        
+        this.entityManager.updateEntities();
 
         const activeEnities = this.entityManager.getEntities();
 
@@ -73,6 +78,7 @@ export default class Game {
         while (this.accumulator >= FIXED_TIMESTAMP) {
             // update physics using the fixed timestep
             this.physicsEngine.update(activeEnities, FIXED_TIMESTAMP, this.input);
+            this.entityCollisionHandler.handleEntityCollisions(activeEnities);
             this.accumulator -= FIXED_TIMESTAMP;
         }
         

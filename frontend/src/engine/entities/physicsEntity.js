@@ -31,6 +31,8 @@ export default class PhysicsEntity {
             right: false,
             left: false
         };
+        // Flag to indicate if the entity is dead
+        this.isDead = false;
     }
 
     /**
@@ -77,5 +79,9 @@ export default class PhysicsEntity {
     resetHorizontalBlocks() {
         this.blocked.right = false;
         this.blocked.left = false;
+    }
+
+    die() {
+        this.isDead = true;
     }
 }

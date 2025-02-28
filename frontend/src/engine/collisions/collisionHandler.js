@@ -1,3 +1,5 @@
+import PhysicsEntity from "../entities/physicsEntity";
+import { getOverlaps } from "../utils/helpers";
 /**
  * Handles collision detection and resolution between physics entities and level tiles.
  *
@@ -6,7 +8,6 @@
  * @class CollisionHandler
  * @param {Level} level - The game level containing tile information.
  */
-import PhysicsEntity from "../entities/physicsEntity";
 
 export default class CollisionHandler {
     /**
@@ -71,8 +72,8 @@ export default class CollisionHandler {
      * @param {Object} tileBox - The bounding box of the tile being collided with.
      */
     resolveCollision(physicsEntity, entityBox, tileBox) {
-        const overlapX = Math.min(entityBox.right - tileBox.left, tileBox.right - entityBox.left);
-        const overlapY = Math.min(entityBox.bottom - tileBox.top, tileBox.bottom - entityBox.top);
+
+        const [overlapX, overlapY] = getOverlaps(entityBox, tileBox);
 
         if (overlapX < overlapY) {
             // Horizontal collision: adjust x position.
