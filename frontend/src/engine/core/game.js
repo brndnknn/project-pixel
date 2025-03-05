@@ -8,6 +8,7 @@ import CollisionHandler from "../collisions/collisionHandler.js";
 import EntityCollisionHandler from "../collisions/entityCollisionHandler.js";
 import { loadLevel } from "../utils/levelLoader.js";
 import { FIXED_TIMESTAMP } from "../utils/constants.js";
+import Camera from "./camera.js";
 
 /**
  * Main game class that orchestrates initialization, updates, and rendering.
@@ -34,6 +35,7 @@ export default class Game {
         this.physicsEngine;
         this.collisionHandler;
         this.entityCollisionHandler;
+        this.camera;
     }
 
         /**
@@ -47,6 +49,7 @@ export default class Game {
 
         this.entityManager.addEntity(this.player);
         this.entityManager.addEntity(this.enemy);
+        this.camera = new Camera(this.player, this.canvas.width, this.canvas.height, 1, this.context);
         this.collisionHandler = new CollisionHandler(this.level);
         this.entityCollisionHandler = new EntityCollisionHandler(this.level);
         this.physicsEngine = new PhysicsEngine(3, this.collisionHandler);
@@ -69,7 +72,7 @@ export default class Game {
 
         // Add the elapsed itme to the accumulator
         this.accumulator += deltaTime;
-        
+
         this.entityManager.updateEntities();
 
         const activeEnities = this.entityManager.getEntities();
@@ -79,6 +82,7 @@ export default class Game {
             // update physics using the fixed timestep
             this.physicsEngine.update(activeEnities, FIXED_TIMESTAMP, this.input);
             this.entityCollisionHandler.handleEntityCollisions(activeEnities);
+            this.camera.update(FIXED_TIMESTAMP);
             this.accumulator -= FIXED_TIMESTAMP;
         }
         

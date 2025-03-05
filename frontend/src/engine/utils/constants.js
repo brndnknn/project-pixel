@@ -28,3 +28,17 @@ export const TILE_KEYS = {              // Default tile keys
 export const GRAVITY = 1.5;              // Gravity force applied to entities
 export const FIXED_TIMESTAMP = 1 / 60; // roughly 16.67ms per physics update
 
+// CANVAS SETTINGS
+export const CANVAS = {
+    WIDTH: 800,
+    HEIGHT: 640
+}
+
+// Camera settings deadzone allows 3 tile buffer around canvas
+export const CAMERA_VIEWPORT = {
+    left: TILE_SIZE * 3,
+    top: TILE_SIZE * 3,
+    right: CANVAS.WIDTH - (TILE_SIZE * 3),
+    bottom: CANVAS.HEIGHT - (TILE_SIZE * 3)
+    
+}
