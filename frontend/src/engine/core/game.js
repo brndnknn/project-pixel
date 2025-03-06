@@ -85,7 +85,7 @@ export default class Game {
             this.accumulator -= FIXED_TIMESTAMP;
         }
         
-        this.render();
+        this.render(deltaTime);
 
         requestAnimationFrame((timestamp) => this.gameLoop(timestamp));
     }
@@ -95,11 +95,11 @@ export default class Game {
      *
      * Clears the canvas and draws the level and the player.
      */
-    render() {
+    render(deltaTime) {
         // clear canvas
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.context.save();
-        this.camera.update();
+        this.camera.update(deltaTime);
 
         this.level.render(this.context);
         this.entityManager.renderEntities(this.context);

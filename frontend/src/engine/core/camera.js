@@ -21,22 +21,33 @@ export default class Camera {
         this.context = context;
         this.viewport = CAMERA_VIEWPORT;
 
-        
+        this.offsetX = 0;
+        this.offsetY = 0;
     }
 
-    /**
-     * Updates the camera's position based on the target's current position.
-     * 
-     */
-    update() {
-        // console.log(this.deadZone, this.target.getBoundingBox(), this.boundryCheck());
-        const playerBox = this.target.getBoundingBox();
-        console.log(playerBox, this.viewport)
-        if(!this.isWithinViewport(playerBox)){
-            const {offsetX, offsetY } = calculateCameraOffset(playerBox, this.viewport);
-            this.applyTransform(offsetX, offsetY);
-        }
+/**
+ * Updates the camera's position based on the target's current position.
+ * Calculates the desired offset using the target's bounding box and the viewport,
+ * then gradually updates the persistent offset using the smoothing factor.
+ */
+update(deltaTime) {
+    // Get the target's bounding box in world coordinates.
+    const targetBox = this.target.getBoundingBox();
+
+    // Check if the target is outside the viewport.
+    if (!this.isWithinViewport(targetBox)) {
+        // Calculate the desired offset needed to bring the target within the viewport.
+        const { offsetX: desiredOffsetX, offsetY: desiredOffsetY } = calculateCameraOffset(targetBox, this.viewport);
+
+        // Gradually adjust the stored offsets toward the desired offsets.
+        // Use deltaTime if you want time-based smoothing.
+        this.offsetX += (desiredOffsetX - this.offsetX) * this.smoothing * deltaTime;
+        this.offsetY += (desiredOffsetY - this.offsetY) * this.smoothing * deltaTime;
+        
+        this.applyTransform();
     }
+}
+
 
     /**
      * Checks if any part of the target is inside the deadzone 
@@ -52,14 +63,17 @@ export default class Camera {
         );
     }
 
-    /**
-     * Applies the camera's transformation to the canvas context.
-     * This shifts all subsequent rendering by the camera's offset.
-     * @param {CanvasRenderingContext2D} context - The canvas drawing context.
-     */
-    applyTransform(offsetX, offsetY) {
-        this.context.translate(offsetX, offsetY);
-    }
+/**
+ * Applies the camera's transformation to the canvas context.
+ * This shifts all subsequent rendering by the negative of the camera's stored offset,
+ * so that the world appears to move relative to the camera.
+ */
+applyTransform() {
+    // Translate the context by the negative of the stored offsets.
+    // This brings the camera's desired world offset into effect.
+    this.context.translate(this.offsetX, this.offsetY);
+}
+
 
     /**
      * Resets the canvas context's transformation to its default state.
