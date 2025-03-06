@@ -26,13 +26,13 @@ export default class Camera {
 
     /**
      * Updates the camera's position based on the target's current position.
-     * This method may use interpolation for smoother transitions.
-     * @param {number} deltaTime - The elapsed time since the last update.
+     * 
      */
-    update(deltaTime) {
+    update() {
         // console.log(this.deadZone, this.target.getBoundingBox(), this.boundryCheck());
         const playerBox = this.target.getBoundingBox();
-        if(!this.boundryCheck(playerBox)){
+        console.log(playerBox, this.viewport)
+        if(!this.isWithinViewport(playerBox)){
             const {offsetX, offsetY } = calculateCameraOffset(playerBox, this.viewport);
             this.applyTransform(offsetX, offsetY);
         }
@@ -42,7 +42,7 @@ export default class Camera {
      * Checks if any part of the target is inside the deadzone 
      * @param {object} box - The boundning box for the target entity
      */
-    boundryCheck(box) {
+    isWithinViewport(box) {
         
         return(
             box.left > this.viewport.left &&

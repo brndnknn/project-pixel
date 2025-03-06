@@ -82,7 +82,6 @@ export default class Game {
             // update physics using the fixed timestep
             this.physicsEngine.update(activeEnities, FIXED_TIMESTAMP, this.input);
             this.entityCollisionHandler.handleEntityCollisions(activeEnities);
-            this.camera.update(FIXED_TIMESTAMP);
             this.accumulator -= FIXED_TIMESTAMP;
         }
         
@@ -99,9 +98,12 @@ export default class Game {
     render() {
         // clear canvas
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.context.save();
+        this.camera.update();
 
         this.level.render(this.context);
         this.entityManager.renderEntities(this.context);
+        this.context.restore();
     }
 
     /**

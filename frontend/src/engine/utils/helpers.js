@@ -38,7 +38,7 @@ export function calculateCameraOffset(targetBox, viewportBox) {
     }
     // Otherwise, if the target's right edge is to the right of the viewport, we need a negative offset.
     else if (targetBox.right > viewportBox.right) {
-        offsetX = targetBox.right - viewportBox.right;
+        offsetX = viewportBox.right - targetBox.right;
     }
 
     // Check vertical boundaries:
@@ -48,7 +48,7 @@ export function calculateCameraOffset(targetBox, viewportBox) {
     }
     // Otherwise, if the target's bottom edge is below the viewport, we need a negative offset.
     else if (targetBox.bottom > viewportBox.bottom) {
-        offsetY = targetBox.bottom - viewportBox.bottom;
+        offsetY = viewportBox.bottom - targetBox.bottom;
     }
 
     return { offsetX, offsetY };
