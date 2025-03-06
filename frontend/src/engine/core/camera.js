@@ -1,5 +1,5 @@
 import { CAMERA_VIEWPORT } from "../utils/constants";
-import { calculateCameraOffset } from "../utils/helpers";
+import { calculateCameraOffset, clamp } from "../utils/helpers";
 /**
  * Camera class manages the viewport for the game.
  * It follows a target entity (e.g., the player) and calculates an offset
@@ -13,16 +13,22 @@ export default class Camera {
      * @param {number} canvasHeight - The height of the canvas.
      * @param {number} smoothing - A factor for smoothing camera movement.
      */
-    constructor(target, canvasWidth, canvasHeight, smoothing, context) {
+    constructor(target, canvasWidth, canvasHeight, smoothing, context, level) {
         this.target = target;
         this.canvasWidth = canvasWidth;
         this.canvasHeight = canvasHeight;
         this.smoothing = smoothing;
         this.context = context;
+        this.level = level;
+        this.levelWidth = (this.level.grid[0].length) * this.level.tileSize;
+        this.levelHeight = (this.level.grid.length) * this.level.tileSize;
         this.viewport = CAMERA_VIEWPORT;
 
         this.offsetX = 0;
         this.offsetY = 0;
+        this.maxOffsetX = Math.max(0, this.levelWidth - this.canvasWidth);
+        this.maxOffsetY = Math.max(0, this.levelHeight - this.canvasHeight);
+        // console.log(this.maxOffsetX, this.maxOffsetY);
     }
 
 /**
@@ -36,17 +42,44 @@ update(deltaTime) {
 
     // Check if the target is outside the viewport.
     if (!this.isWithinViewport(targetBox)) {
+        const effectiveViewport = this.getEffectiveViewport();
+
         // Calculate the desired offset needed to bring the target within the viewport.
-        const { offsetX: desiredOffsetX, offsetY: desiredOffsetY } = calculateCameraOffset(targetBox, this.viewport);
+        const { 
+            offsetX: desiredOffsetX,
+            offsetY: desiredOffsetY
+         } = calculateCameraOffset(targetBox, effectiveViewport);
 
         // Gradually adjust the stored offsets toward the desired offsets.
         // Use deltaTime if you want time-based smoothing.
-        this.offsetX += (desiredOffsetX - this.offsetX) * this.smoothing * deltaTime;
-        this.offsetY += (desiredOffsetY - this.offsetY) * this.smoothing * deltaTime;
-        
-        this.applyTransform();
+        this.offsetX += (desiredOffsetX) * this.smoothing * deltaTime;
+        this.offsetY += (desiredOffsetY) * this.smoothing * deltaTime;
+
+        this.offsetX = clamp(this.offsetX, -this.maxOffsetX, 0);
+        this.offsetY = clamp(this.offsetY, -this.maxOffsetY, this.maxOffsetY);
+
+        // this.offsetX = Math.min(0, Math.max(this.offsetX, -this.maxOffsetX));
+        // this.offsetY = Math.max(-this.maxOffsetY, Math.min(this.offsetY, this.maxOffsetY));
+
+        //console.log(`Offset X ${this.offsetX}, Offset Y ${this.offsetY}`);
+        }else{
+            //this.offsetX = 0;
+        } 
     }
-}
+
+
+    /**
+     * Returns the viewport boundaries in *world coordinates* by adding 
+     * the current offset to the static (screen-based) viewport values.
+     */
+    getEffectiveViewport() {
+        return {
+            left: this.viewport.left - this.offsetX,
+            right: this.viewport.right + this.offsetX,
+            top: this.viewport.top - this.offsetY,
+            bottom: this.viewport.bottom + this.offsetY
+        };
+    }
 
 
     /**
@@ -54,12 +87,12 @@ update(deltaTime) {
      * @param {object} box - The boundning box for the target entity
      */
     isWithinViewport(box) {
-        
+        const effectiveViewport = this.getEffectiveViewport();
         return(
-            box.left > this.viewport.left &&
-            box.top > this.viewport.top &&
-            box.right < this.viewport.right &&
-            box.bottom < this.viewport.bottom
+            box.left > effectiveViewport.left &&
+            box.top > effectiveViewport.top &&
+            box.right < effectiveViewport.right &&
+            box.bottom < effectiveViewport.bottom
         );
     }
 
@@ -69,6 +102,9 @@ update(deltaTime) {
  * so that the world appears to move relative to the camera.
  */
 applyTransform() {
+    // Reset so transforms don't stack forever
+    this.context.setTransform(1, 0, 0, 1, 0, 0);
+
     // Translate the context by the negative of the stored offsets.
     // This brings the camera's desired world offset into effect.
     this.context.translate(this.offsetX, this.offsetY);

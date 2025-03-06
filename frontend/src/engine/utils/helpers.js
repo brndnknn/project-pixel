@@ -53,3 +53,15 @@ export function calculateCameraOffset(targetBox, viewportBox) {
 
     return { offsetX, offsetY };
 }
+
+/**
+ * Clamps a number between a minimum and maximum value.
+ * 
+ * @param {number} value - The number you want to clamp.
+ * @param {number} min - The lower boundary.
+ * @param {number} max - The upper boundary.
+ * @returns {number} The clamped result.
+ */
+export function clamp(value, min, max) {
+    return Math.max(min, Math.min(value, max));
+  }

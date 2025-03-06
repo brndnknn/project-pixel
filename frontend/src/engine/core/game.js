@@ -21,7 +21,7 @@ export default class Game {
     constructor(canvas) {
         this.canvas = canvas;
         this.context = canvas.getContext('2d');
-        this.player = new Player(50, 50);
+        this.player = new Player(100, 100);
         this.enemy = new Enemy(650, 50);
         this.lastTime = 0;
         this.accumulator = 0;
@@ -49,7 +49,7 @@ export default class Game {
 
         this.entityManager.addEntity(this.player);
         this.entityManager.addEntity(this.enemy);
-        this.camera = new Camera(this.player, this.canvas.width, this.canvas.height, 1, this.context);
+        this.camera = new Camera(this.player, this.canvas.width, this.canvas.height, 2.2, this.context, this.level);
         this.collisionHandler = new CollisionHandler(this.level);
         this.entityCollisionHandler = new EntityCollisionHandler(this.level);
         this.physicsEngine = new PhysicsEngine(3, this.collisionHandler);
@@ -100,6 +100,7 @@ export default class Game {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.context.save();
         this.camera.update(deltaTime);
+        this.camera.applyTransform();
 
         this.level.render(this.context);
         this.entityManager.renderEntities(this.context);
