@@ -20,15 +20,12 @@ export default class Camera {
         this.smoothing = smoothing;
         this.context = context;
         this.level = level;
-        this.levelWidth = (this.level.grid[0].length) * this.level.tileSize;
-        this.levelHeight = (this.level.grid.length) * this.level.tileSize;
         this.viewport = CAMERA_VIEWPORT;
 
         this.offsetX = 0;
         this.offsetY = 0;
-        this.maxOffsetX = Math.max(0, this.levelWidth - this.canvasWidth);
-        this.maxOffsetY = Math.max(0, this.levelHeight - this.canvasHeight);
-        // console.log(this.maxOffsetX, this.maxOffsetY);
+        this.maxOffsetX = Math.max(0, ((this.level.grid[0].length) * this.level.tileSize) - this.canvasWidth);
+        this.maxOffsetY = Math.max(0, ((this.level.grid.length) * this.level.tileSize) - this.canvasHeight);
     }
 
 /**
@@ -58,13 +55,7 @@ update(deltaTime) {
         this.offsetX = clamp(this.offsetX, -this.maxOffsetX, 0);
         this.offsetY = clamp(this.offsetY, -this.maxOffsetY, this.maxOffsetY);
 
-        // this.offsetX = Math.min(0, Math.max(this.offsetX, -this.maxOffsetX));
-        // this.offsetY = Math.max(-this.maxOffsetY, Math.min(this.offsetY, this.maxOffsetY));
-
-        //console.log(`Offset X ${this.offsetX}, Offset Y ${this.offsetY}`);
-        }else{
-            //this.offsetX = 0;
-        } 
+        }
     }
 
 
