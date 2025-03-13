@@ -36,9 +36,9 @@ export const CANVAS = {
 
 // Camera settings deadzone allows 3 tile buffer around canvas
 export const CAMERA_VIEWPORT = {
-    left: TILE_SIZE * 3,
-    top: TILE_SIZE * 3,
-    right: CANVAS.WIDTH - (TILE_SIZE * 3),
-    bottom: CANVAS.HEIGHT - (TILE_SIZE * 3)
+    left: TILE_SIZE * 5,
+    top: TILE_SIZE * 5,
+    right: CANVAS.WIDTH - (TILE_SIZE * 5),
+    bottom: CANVAS.HEIGHT - (TILE_SIZE * 5)
     
 }

@@ -49,7 +49,7 @@ export default class Game {
 
         this.entityManager.addEntity(this.player);
         this.entityManager.addEntity(this.enemy);
-        this.camera = new Camera(this.player, this.canvas.width, this.canvas.height, 2.2, this.context, this.level);
+        this.camera = new Camera(this.player, this.canvas.width, this.canvas.height, 7, this.context, this.level);
         this.collisionHandler = new CollisionHandler(this.level);
         this.entityCollisionHandler = new EntityCollisionHandler(this.level);
         this.physicsEngine = new PhysicsEngine(3, this.collisionHandler);

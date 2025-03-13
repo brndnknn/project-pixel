@@ -49,11 +49,11 @@ update(deltaTime) {
 
         // Gradually adjust the stored offsets toward the desired offsets.
         // Use deltaTime if you want time-based smoothing.
-        this.offsetX += (desiredOffsetX) * this.smoothing * deltaTime;
-        this.offsetY += (desiredOffsetY) * this.smoothing * deltaTime;
+        this.offsetX -= (desiredOffsetX) * this.smoothing * deltaTime;
+        this.offsetY -= (desiredOffsetY) * this.smoothing * deltaTime;
 
-        this.offsetX = clamp(this.offsetX, -this.maxOffsetX, 0);
-        this.offsetY = clamp(this.offsetY, -this.maxOffsetY, this.maxOffsetY);
+        this.offsetX = clamp(this.offsetX, 0, this.maxOffsetX);
+        this.offsetY = clamp(this.offsetY, 0, this.maxOffsetY);
 
         }
     }
@@ -65,9 +65,9 @@ update(deltaTime) {
      */
     getEffectiveViewport() {
         return {
-            left: this.viewport.left - this.offsetX,
+            left: this.viewport.left + this.offsetX,
             right: this.viewport.right + this.offsetX,
-            top: this.viewport.top - this.offsetY,
+            top: this.viewport.top + this.offsetY,
             bottom: this.viewport.bottom + this.offsetY
         };
     }
@@ -98,7 +98,7 @@ applyTransform() {
 
     // Translate the context by the negative of the stored offsets.
     // This brings the camera's desired world offset into effect.
-    this.context.translate(this.offsetX, this.offsetY);
+    this.context.translate(-this.offsetX, -this.offsetY);
 }
 
 
