@@ -96,9 +96,11 @@ applyTransform() {
     // Reset so transforms don't stack forever
     this.context.setTransform(1, 0, 0, 1, 0, 0);
 
+    const roundedOffsetX = Math.round(this.offsetX);
+    const roundedOffsetY = Math.round(this.offsetY)
     // Translate the context by the negative of the stored offsets.
     // This brings the camera's desired world offset into effect.
-    this.context.translate(-this.offsetX, -this.offsetY);
+    this.context.translate(-roundedOffsetX, -roundedOffsetY);
 }
 
 
